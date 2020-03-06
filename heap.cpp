@@ -33,14 +33,20 @@ private:
 
 int main(void){
   Heap h; // construtor Heap()
-  
+  int x;
   for (int i = 1; i <= 10; i++)
     h.insere(i);
+
+
+  h.altera_prioridade(2, 0);
+  //printf("X = %d \n", x);
+  
   printf("h:\n");
-  h.escreve();
+  h.escreve();    
+
   exit(0);
 
-  int v[] = {1,2,3,4,5};
+  /*int v[] = {1,2,3,4,5};
   
   Heap h2(5, v); // construtor Heap(int n, int dados[])
   h2.insere(15);
@@ -68,7 +74,7 @@ int main(void){
   printf("h:\n");
   h.escreve();
   
-  return 0;
+  return 0;*/
 }
 
 /*
@@ -138,7 +144,7 @@ Heap::Heap() {
 
 Heap::Heap(int n, int dados[]) :
   S(dados, dados + n) {
-  //TODO: implementar (constroi_max_heap)
+  
 
 }
 
@@ -198,7 +204,7 @@ void Heap::desce(int i) {
 
   e = esquerdo(i);
   d = direito(i);
-  n = S.size();
+  n = S.size() - 1;
 
   if(e < n && S[e] > S[i])
     maior = e;
@@ -234,15 +240,17 @@ int Heap::extrai_maxima(){
   x = S[0];
   n = S.size();
   S[0] = S[n-1];
-  S.pop_back();
   desce(0);
+  S.pop_back();
 
   return x;
 }
 
 void Heap::altera_prioridade(int i, int p) {
-  if(p < S[i])
-    printf("ERRO\n");
+  if(p < S[i]){
+    S[i] = p;
+    desce(i);
+  }  
   else{
     S[i] = p;
     sobe(i);
