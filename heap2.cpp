@@ -47,9 +47,9 @@ int main(void){
   h.altera_prioridade(0, -3);
   printf("h:\n");
   h.escreve();
-
-  int v[] = {1,2,3,4,5};
   
+  int v[] = {1,2,3,4,5};
+
   Heap h2(5, v); // construtor Heap(int n, int dados[])
   h2.insere(15);
   printf("h2:\n");
@@ -84,15 +84,20 @@ int main(void){
   return 0;
 }
 
-void Heap :: Heap(){
+Heap :: Heap(){
   n = 0;
   capacidade = TAMANHO_INICIAL;
-  int S = new int[TAMANHO_INICIAL];
+  S = new int[TAMANHO_INICIAL];
 }
 
-void Heap :: Heap(const int n, const int dados[]){
+Heap :: ~Heap(){
+
+}
+
+Heap :: Heap(const int n, const int dados[]){
+  this->n = n;
   capacidade = n;
-  int S =  new int[n];
+  S =  new int[n];
 
   for(int i = 0; i < n; i++)
     S[i] = dados[i];
@@ -102,8 +107,22 @@ void Heap :: Heap(const int n, const int dados[]){
 
 }
 
-void Heap :: Heap(const Heap& outro){
-  
+Heap :: Heap(const Heap& outro){
+  capacidade = outro.capacidade;
+  n = outro.n;
+  S = new int [capacidade];
+  for(int i = 0; i < n; i++)
+    S[i] = outro.S[i];
+}
+
+Heap & Heap :: operator=(const Heap& outro){
+  delete[] S;
+  capacidade = outro.capacidade;
+  n = outro.n;
+  S = new int [capacidade];
+  for(int i = 0; i < n; i++)
+    S[i] = outro.S[i];
+  return *this;
 }
 
 int Heap::pai(int i) {
@@ -198,10 +217,11 @@ void Heap::altera_prioridade(int i, int p) {
 void Heap::escreve_niveis() {
   int escritos = 0, fim_nivel = 1;
 
-  for(auto const& elemento: S) {
-  // Equivalente a for (unsigned i = 0; i < S.size(); i++) { printf("%d ", S[i]);
-    printf("%d ", elemento);
-    if (++escritos == fim_nivel) {
+  for(int i = 0; i < n; i++){
+  // Equivalente a for (unsigned i = 0; i < S.size(); i++){ 
+    printf("%d ", S[i]);
+    //printf("%d ", elemento);
+    if(++escritos == fim_nivel) {
       putchar('\n');
       fim_nivel *= 2;
       escritos = 0;
@@ -211,9 +231,9 @@ void Heap::escreve_niveis() {
 }
 
 void Heap::escreve(const string& prefixo, int i) {
-  if (i < (int) S.size()) {
+  if(i < n){
     bool ehEsquerdo = i % 2 != 0;
-    bool temIrmao = i < (int) S.size()-1;
+    bool temIrmao = i < n-1;
     
     printf(prefixo.c_str());
     printf(ehEsquerdo and temIrmao ? "├──" : "└──" );
